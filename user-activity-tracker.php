@@ -5,8 +5,9 @@
 * Version: 1.0.0
 * Author: Hazrath Ali
 * Author URI: https://author.example.com/
+* License: GPL-2.0+
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
-* Text Domain: uact
+* Text Domain: user-activity-tracker
 */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly

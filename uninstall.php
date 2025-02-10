@@ -4,9 +4,12 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 }
 
 global $wpdb;
-$table_name = $wpdb->prefix . "uact_user_activity"; 
+$cache_key = 'my_cache_key';
+$data = wp_cache_get($cache_key);
 
-// Delete the table
-$wpdb->query("DROP TABLE IF EXISTS $table_name");
+if ($data === false) {
+    $data = $wpdb->get_results("SELECT * FROM `$table_name`");
+    wp_cache_set($cache_key, $data, 'my_cache_group', 3600);
+}
 
 ?>
