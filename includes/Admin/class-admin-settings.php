@@ -75,6 +75,7 @@ if( !class_exists('UACT_Admin_Settings') ) {
             <?php
             echo get_option( 'uact_admin_gmail', get_bloginfo('admin_email') );
         }
+        
         public function uact_settings_dashboard() {
             if ( ! current_user_can( 'manage_options' ) ) {
                 return;
