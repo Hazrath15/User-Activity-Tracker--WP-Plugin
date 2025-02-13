@@ -9,7 +9,7 @@ if( !class_exists('UACT_Update_Tracker') ) {
             add_action( 'untrash_post', [ $this, 'track_post_restore' ] );
         }
 
-        public function uact_send_email_notification( $subject, $message, $to_email ) {
+        public function uact_send_email_notification( $subject, $message, $to_email, $current_user, $action, $modified_date ) {
             // Retrieve the custom email template from the database
             $email_template = get_option( 'uact_email_template', '' );
         
@@ -72,7 +72,7 @@ if( !class_exists('UACT_Update_Tracker') ) {
             $message .= "<strong>Date:</strong> $modified_date<br>";
             $message .= "<strong>IP Address:</strong> $ip<br>";
 
-            $this->uact_send_email_notification( $subject, $message, $admin_email );
+            $this->uact_send_email_notification( $subject, $message, $admin_email, $current_user, $action, $modified_date );
         }
 
         public function uact_get_activity_function( $action, $obj_type, $post_id, $post_title ) {
