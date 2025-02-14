@@ -29,6 +29,43 @@ if( !class_exists('UACT_Database_Handler') ) {
             }
 
         }
+        
+        public function uact_user_activity_add( $post_id, $post_title, $obj_type, $current_user_id, $current_user, $user_role, $user_mail, $modified_date, $ip, $action ) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'uact_user_activity';
+            $post_title = addslashes( $post_title );
+            if ( '' == $obj_type ) {
+                $obj_type = 'post';
+            }
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $insert_query = $wpdb->insert(
+                $table_name,
+                array(
+                    'post_id'       => $post_id,
+                    'post_title'    => $post_title,
+                    'user_id'       => $current_user_id,
+                    'user_name'     => $current_user,
+                    'user_role'     => $user_role,
+                    'user_email'    => $user_mail,
+                    'ip_address'    => $ip,
+                    'modified_date' => $modified_date,
+                    'object_type'   => $obj_type,
+                    'action'        => $action,
+                )
+            );
+            // Send email notification
+            $admin_email = get_option( 'admin_email' ); // Get admin email
+            $subject = "Activity Tracker: $action on $obj_type";
+            $message = "A new activity has been recorded:<br><br>";
+            $message .= "<strong>Action:</strong> $action<br>";
+            $message .= "<strong>Object Type:</strong> $obj_type<br>";
+            $message .= "<strong>Post Title:</strong> $post_title<br>";
+            $message .= "<strong>User:</strong> $current_user ($user_role)<br>";
+            $message .= "<strong>Date:</strong> $modified_date<br>";
+            $message .= "<strong>IP Address:</strong> $ip<br>";
+
+            $this->uact_send_email_notification( $subject, $message, $admin_email, $current_user, $action, $modified_date );
+        }
 
         public static function delete() {
             global $wpdb;
