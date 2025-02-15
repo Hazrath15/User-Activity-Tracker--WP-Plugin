@@ -9,13 +9,13 @@ if( !class_exists('UACT_Autoloader') ) {
 
             //Load Admin Settings
             require_once UACT_PLUGIN_DIR . 'includes/Admin/class-admin-settings.php';
-            
-            //Load User Utilities
-            require_once UACT_PLUGIN_DIR . 'includes/utilities/class-logger.php';
 
             //Load Traits 
             require_once UACT_PLUGIN_DIR . 'includes/traits/trait-mail-helper.php';
             require_once UACT_PLUGIN_DIR . 'includes/traits/trait-activity-helper.php';
+            
+            //Load User Utilities
+            require_once UACT_PLUGIN_DIR . 'includes/utilities/class-logger.php';
 
             // Load Plugin Activator and Deactivator 
             require_once UACT_PLUGIN_DIR . 'includes/class-activator.php';

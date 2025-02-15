@@ -68,12 +68,11 @@ if( !class_exists('UACT_Admin_Settings') ) {
             </div>
             <form method="get" action="">
                 <input type="hidden" name="uact_export_csv" value="1">
-                <input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'uact_export_csv' ); ?>">
+                <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce( 'uact_export_csv' )); ?>">
                 <p><input type="submit" class="button-secondary" value="Export Activity as CSV"></p>
             </form>
 
             <?php
-            echo get_option( 'uact_admin_gmail', get_bloginfo('admin_email') );
         }
         
         public function uact_settings_dashboard() {
@@ -85,8 +84,13 @@ if( !class_exists('UACT_Admin_Settings') ) {
             if ( isset( $_POST['uact_save_settings'] ) ) {
                 check_admin_referer( 'uact_settings_save', 'uact_settings_nonce' );
         
-                update_option( 'uact_admin_gmail', sanitize_email( $_POST['uact_admin_gmail'] ) );
-                update_option( 'uact_email_template', wp_kses_post( $_POST['uact_email_template'] ) );
+                if ( isset( $_POST['uact_admin_gmail'] ) ) {
+                    $admin_gmail = sanitize_email( $_POST['uact_admin_gmail'] );
+                    update_option( 'uact_admin_gmail', $admin_gmail );
+                }
+                if (isset($_POST['uact_email_template'])) {
+                    update_option('uact_email_template', wp_kses_post($_POST['uact_email_template']));
+                }                
         
                 echo '<div class="updated"><p>Settings saved successfully.</p></div>';
             }
@@ -176,7 +180,7 @@ if( !class_exists('UACT_Admin_Settings') ) {
                     ));
                 }
         
-                fclose( $output );
+                WP_Filesystem();
                 exit;
             }
         }
