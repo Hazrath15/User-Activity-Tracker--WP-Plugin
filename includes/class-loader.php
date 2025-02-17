@@ -5,7 +5,6 @@ if( !class_exists('UACT_Autoloader') ) {
 
             //Load Database Handler
             require_once UACT_PLUGIN_DIR . 'includes/Database/class-database-handler.php';
-            require_once UACT_PLUGIN_DIR . 'includes/Database/class-update-tracker.php';
 
             //Load Admin Settings
             require_once UACT_PLUGIN_DIR . 'includes/Admin/class-admin-settings.php';
