@@ -10,7 +10,8 @@ if( !class_exists('UACT_Logger') ) {
         public function __construct() {
             add_action( 'wp_login', [ $this, 'uact_user_wp_login' ], 20, 2 );
             add_action( 'wp_insert_comment', [ $this, 'uact_wp_insert_comment' ] );
-            add_action( 'post_updated', [ $this, 'track_post_action' ], 10, 3 );
+            add_action( 'edit_post', [ $this, 'track_post_edit' ], 10, 2 );
+            add_action( 'wp_insert_post', [ $this, 'track_post_creation' ], 10, 3 );  
             add_action( 'wp_trash_post', [ $this, 'track_post_deletion' ] );
             add_action( 'untrash_post', [ $this, 'track_post_restore' ] );
         }
@@ -47,28 +48,48 @@ if( !class_exists('UACT_Logger') ) {
             $this->uact_get_activity_function( $action, $obj_type, $post_id, $post_title );
         }
 
-        public function track_post_action( $post_id, $post, $update ) {
-            if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-                return;
+        public function track_post_creation( $post_id, $post, $update ) {
+            $post = get_post( $post_id );
+            if ( $update ) {
+                return; // Only track new posts
             }
-
+        
             if ( 'post' !== $post->post_type ) {
                 return;
             }
-
-            $post_title = $post->post_title;
+        
+            // Set a temporary post meta to identify new posts
+            update_post_meta( $post_id, '_is_new_post', true );
             $obj_type = 'post';
-            
-            if ( ! $update ) {
-                $action = 'create';
-                $post_title = 'Created: ' . $post_title;
-            } else {
-                $action = 'update';
-                $post_title = 'Edited: ' . $post_title;
-            }
-
+            $action = 'create';
+            $post_title = 'Created ' . $post->post_title;
             $this->uact_get_activity_function( $action, $obj_type, $post_id, $post_title );
         }
+              
+        public function track_post_edit( $post_id ) {
+            // Get the post object
+            $post = get_post( $post_id );
+        
+            // Ensure it's a standard post type
+            if ( 'post' !== $post->post_type ) {
+                return;
+            }
+        
+            // Check if this is a new post
+            $is_new_post = get_post_meta( $post_id, '_is_new_post', true );
+        
+            // If it's a new post, delete the meta and return (skip logging edit)
+            if ( $is_new_post ) {
+                delete_post_meta( $post_id, '_is_new_post' );
+                return;
+            }
+        
+            $obj_type = 'post';
+            $action = 'edit';
+            // Track only if it's an edit
+            $post_title = 'Edited ' . $post->post_title;
+            $this->uact_get_activity_function( $action, $obj_type, $post_id, $post_title );
+        }    
 
         public function track_post_deletion( $post_id ) {
             $post = get_post( $post_id );

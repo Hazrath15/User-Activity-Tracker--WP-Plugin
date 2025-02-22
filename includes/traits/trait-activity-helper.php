@@ -12,7 +12,7 @@ if( !trait_exists('UACT_Activity_Helper') ) {
             $modified_date             = current_time( 'mysql' );
             $ip                        = '';
             $current_user_id = get_current_user_id();
-            $user            = new WP_User( $current_user_id );
+            $user            = new \WP_User( $current_user_id );
             $user_mail       = $user->user_email;
             global $wp_roles;
             $role_name = array();
