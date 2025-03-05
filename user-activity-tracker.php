@@ -4,7 +4,7 @@
 * Description: This is first plugin for learning. From this plugin the plugin development lession is starting.
 * Version: 1.0.0
 * Author: Hazrath Ali
-* Author URI: https://author.example.com/
+* Author URI: https://github.com/Hazrath15
 * License: GPL-2.0+
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 * Text Domain: user-activity-tracker

@@ -1,4 +1,6 @@
 <?php
+ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 use Traits\UACT_Activity_Helper;
 use Traits\UACT_Mail_Trait_Helper;
 

@@ -1,5 +1,6 @@
 <?php
 namespace Traits;
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 if( !trait_exists('UACT_Activity_Helper') ) {
     trait UACT_Activity_Helper {

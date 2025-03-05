@@ -136,9 +136,9 @@ if( !class_exists('UACT_Admin_Settings') ) {
             if ( isset( $_REQUEST['uact_export_csv'] ) ) {
         
                 // Verify nonce for security
-                if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'uact_export_csv' ) ) {
-                    wp_die( 'Security check failed' );
-                }
+                if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'uact_export_csv' ) ) {
+                    wp_die( esc_html__( 'Invalid request.', 'user-activity-tracker' ) );
+                }                
         
                 global $wpdb;
                 $table_name = $wpdb->prefix . 'uact_user_activity';
